@@ -1,0 +1,34 @@
+{
+  "name": "learn-through-conversation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "watch": "tsc -w & nodemon --no-deprecation dist/index.js",
+    "test": "jest --watchAll --verbose --silent",
+    "test-loud": "jest --watchAll --verbose"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-typescript": "^7.23.3",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/multer": "^1.4.11",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
+    "cors": "^2.8.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.3",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.28.0"
+  }
+}

@@ -1,0 +1,20 @@
+version: "3.6"
+
+services:
+  server:
+    container_name: conversation-bot-server
+    build:
+      context: ./core
+      dockerfile: dev.Dockerfile
+
+    env_file:
+      - ./core/.env
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./core/:/app
+      - ignore:/app/node_modules/
+
+volumes:
+  ignore:
