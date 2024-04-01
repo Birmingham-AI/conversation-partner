@@ -14,8 +14,8 @@ knowledgeable individual is too taxing or inaccessible for the user. This includ
 
 You'll need the following to use this repository:
 
-- An OpenAI API key with credits
-- Docker
+- An [OpenAI API](https://platform.openai.com/docs/quickstart) key with credits
+- [Docker](https://docs.docker.com/engine/install/)
 
 ## Installation
 
