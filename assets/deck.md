@@ -21,9 +21,7 @@ Birmingham AI
 
 ---
 
-# Thanks to our sponsors!
-
-TODO: Add screenshot
+![width: 400px](sponsors.png)
 
 ---
 
@@ -98,7 +96,7 @@ app.use("/", talkNerdyToMe);
 
 # What does this allow us to do?
 
-TODO: Add excalidraw
+![width: 100%](erd.png)
 
 ---
 
