@@ -9,7 +9,23 @@ class: invert
 
 ---
 
-<!-- paginate: true -->
+## <!-- paginate: true -->
+
+# Who are we?
+
+Birmingham AI
+
+- Big group (loads of backgrounds)
+- Smaller group (engineer types)
+- My name's Rob, I'm a senior engineer @ [Hasura](https://hasura.io/)
+
+---
+
+# Thanks to our sponsors!
+
+TODO: Add screenshot
+
+---
 
 > humans are the hardest, if only i could get by speaking to computers all day <sigh>
 
@@ -23,7 +39,7 @@ Make being dumb cheap.
 
 ---
 
-# Okay, not being dumb...make learning cheap
+# Okay, not being dumb...make **learning** cheap
 
 - Languages
 - Patient histories for new medical professionals
@@ -32,7 +48,7 @@ Make being dumb cheap.
 
 ---
 
-![width:400px](/assets/machine_learning_captcha.png)
+![width:400px](machine_learning_captcha.png)
 
 ---
 
@@ -80,6 +96,12 @@ app.use("/", talkNerdyToMe);
 
 ---
 
+# What does this allow us to do?
+
+TODO: Add excalidraw
+
+---
+
 # Principles
 
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) layers
@@ -120,7 +142,47 @@ app.use("/", talkNerdyToMe);
 
 # Implementation
 
-In the application's business logic:
+Our API exposes this route (interface) 👇
+
+```ts
+export default router.get(
+  "/analyzeUserResponse",
+  async (req: Request, res: Response) => {
+    //   Inputs from the request
+    const dialogue = req.body.dialogue;
+
+    console.log(`🏫 Got a request to analyze a user's response`);
+
+    //   We'll validate them first
+    if (!dialogue) {
+      res.json({ error: "You must include the dialogue you wish to analyze" });
+    }
+
+    // New conversation
+    const response = await analyzeResponse(dialogue);
+
+    console.log(`✅ Analyzed user's response`);
+
+    return res.json({ analysis: response });
+  },
+);
+```
+
+---
+
+# Implementation
+
+Which calls the following logic (use case) using the `QuestionObject` type:
+
+```ts
+type QuestionObject = {
+  questionInTargetLanguage: string;
+  questionInEnglish: string;
+  summary: string;
+  userResponse: string;
+  analysis: string;
+};
+```
 
 ```ts
 export async function analyzeResponse(dialogue: QuestionObject) {
@@ -141,33 +203,6 @@ export async function analyzeResponse(dialogue: QuestionObject) {
     console.error(err);
   }
 }
-```
-
----
-
-# Implementation
-
-And then scoped to the interface (server):
-
-```ts
-export default router.get("/analyzeUserResponse", async (req: Request, res: Response) => {
-  //   Inputs from the request
-  const dialogue = req.body.dialogue;
-
-  console.log(`🏫 Got a request to analyze a user's response`);
-
-  //   We'll validate them first
-  if (!dialogue) {
-    res.json({ error: "You must include the dialogue you wish to analyze" });
-  }
-
-  // New conversation
-  const response = await analyzeResponse(dialogue);
-
-  console.log(`✅ Analyzed user's response`);
-
-  return res.json({ analysis: response });
-});
 ```
 
 ---
@@ -213,7 +248,7 @@ More or less [RAG](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-gen
 
 ---
 
-![width:400px](/assets/wasted_potential.png)
+![width:400px](wasted_potential.png)
 
 ---
 
