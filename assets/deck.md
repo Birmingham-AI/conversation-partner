@@ -39,6 +39,14 @@ Make being dumb cheap.
 
 # Okay, not being dumb...make **learning** cheap
 
+- Shorter feedback loops
+- Quicker, more targeted interventions
+- Specific and authentic feedback
+
+---
+
+# Potential implementations
+
 - Languages
 - Patient histories for new medical professionals
 - Plumbers diagnosing laypeople's descriptions of their problems
@@ -260,3 +268,9 @@ Let's find out! Demo time 🎉
 
 We've [an issue](https://github.com/Birmingham-AI/conversation-partner/issues/1) on this repo with a $50 gift card to
 GPBC bounty 🍻
+
+---
+
+# We need YOU!
+
+![](qr-code.png)
