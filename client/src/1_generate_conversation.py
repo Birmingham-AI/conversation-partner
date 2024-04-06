@@ -1,9 +1,15 @@
-from streamlit_mic_recorder import speech_to_text
 import streamlit as st
 import requests
 import json
-import io
+from audio2audio import transcribing_audio2text, transcribing_text2audio
+from streamlit_mic_recorder import mic_recorder
 
+# Config the whole app
+st.set_page_config(
+    page_title="Conversation Partner",
+    page_icon="🧊",
+    layout="wide",  # initial_sidebar_state="expanded",
+)
 
 @st.cache_data
 def initializing_convo(name: str , skillLevel: str, language: str, age: int, interests: str) -> str:
@@ -61,7 +67,35 @@ def main():
         convo = initializing_convo(name, skillLevel, language, age, interests)
         st.write(":sunglasses: Your Summary: ")
         st.write(convo['summary'])
-        st.write(convo["questions"])
+        with st.expander("See explanation"):
+            st.write(convo["questions"])
+
+        # question = st.selectbox(
+        #     "Pick your first question:", convo["questions"]
+        # )
+        st.write(f"Your first question is: {convo['questions'][0]['questionInTargetLanguage']}")
+        transcribed_audio = transcribing_text2audio(
+            convo["questions"][0]["questionInTargetLanguage"]
+        )
+        st.audio(transcribed_audio)
+        audio = mic_recorder(
+            start_prompt="Start recording",
+            stop_prompt="Stop recording",
+            just_once=False,
+            use_container_width=False,
+            callback=None,
+            args=(),
+            kwargs={},
+            key=None,
+        )
+
+        if audio:
+            st.write("Your recording:")
+            st.audio(audio["bytes"])
+    
+            response = transcribing_audio2text(audio["bytes"])
+            st.write(f"\nTranscribed text: {response}\n")
+            transcribed_text = transcribing_audio2text(transcribed_audio)
 
 
 if __name__ == "__main__":
