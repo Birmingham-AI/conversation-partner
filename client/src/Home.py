@@ -1,6 +1,11 @@
 import streamlit as st
-from audio2audio import transcribing_audio2text, transcribing_text2audio
-
+import requests
+import json
+from core_utils import (
+    transcribing_audio2text,
+    transcribing_text2audio,
+    analyze_user_response,
+)
 from streamlit_mic_recorder import mic_recorder
 
 # Config the whole app
@@ -11,31 +16,109 @@ st.set_page_config(
 )
 
 
+@st.cache_data
+def initializing_convo(
+    name: str, skillLevel: str, language: str, age: int, interests: str
+) -> str:
+
+    url = "http://localhost:3000/generateConversation"
+
+    payload = json.dumps(
+        {
+            "name": name,
+            "skillLevel": skillLevel,
+            "language": language,
+            "age": age,
+            "interests": interests,
+        }
+    )
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    return response.json()
+
+
 def main():
-    st.title("Conversation Partner")
+    st.title("Welcome to the conversation generator")
     st.write(
         "This is a conversation generator that will help you practice your conversation skills"
     )
-    audio = mic_recorder(
-        start_prompt="Start recording",
-        stop_prompt="Stop recording",
-        just_once=False,
-        use_container_width=False,
-        callback=None,
-        args=(),
-        kwargs={},
-        key=None,
-    )
+    st.write("Please fill out the following information to know more about you!")
+    col1, col2 = st.columns(2)  # ([2, 1])
+    with col1:
+        name = st.text_input("Name")
+        age = st.number_input("Age")
+    with col2:
+        skillLevel = st.selectbox(
+            "Skill Level", ["", "Beginner", "Intermediate", "Advanced"]
+        )
+        language = st.selectbox(
+            "Target Language",
+            [
+                "",
+                "English",
+                "Spanish",
+                "French",
+                "German",
+                "Italian",
+                "Portuguese",
+                "Russian",
+                "Chinese",
+                "Japanese",
+                "Korean",
+                "Telugu",
+                "Hindi",
+            ],
+        )
+    interests = st.text_input("list some Interests")
 
-    if audio:
-        st.write('Your recording:')
-        st.audio(audio["bytes"])
+    # check if all fields are filled
+    if name and age and skillLevel and language and interests:
+        # All fields are filled
+        # Continue with the rest of the code
+        convo = initializing_convo(name, skillLevel, language, age, interests)
+        st.write(":sunglasses: Your Summary: ")
+        st.write(convo["summary"])
+        with st.expander("See example questions"):
+            st.write(convo["questions"])
 
-        response = transcribing_audio2text(audio["bytes"])
-        st.write(f"\nTranscribed text: {response}\n")
-        response = transcribing_text2audio(response)
-        st.write('Generated audio:')
-        st.audio(response)
+        # question = st.selectbox(
+        #     "Pick your first question:", convo["questions"]
+        # )
+        st.write(
+            f"Your first question is: {convo['questions'][0]['questionInTargetLanguage']}"
+        )
+        transcribed_audio = transcribing_text2audio(
+            convo["questions"][0]["questionInTargetLanguage"]
+        )
+        st.audio(transcribed_audio)
+        audio = mic_recorder(
+            start_prompt="Start recording",
+            stop_prompt="Stop recording",
+            just_once=False,
+            use_container_width=False,
+            callback=None,
+            args=(),
+            kwargs={},
+            key=None,
+        )
+
+        if audio:
+            st.write("Your recording:")
+            st.audio(audio["bytes"])
+
+            response = transcribing_audio2text(audio["bytes"])
+            st.write(f"\nTranscribed text: {response}\n")
+            convo["questions"][0]["userResponse"] = response
+            analysis = analyze_user_response(convo["questions"][0])
+            st.write("Analysis:")
+            analysis_audio = transcribing_text2audio(analysis)
+            st.audio(analysis_audio)
+            st.write(analysis)
+
+    else:
+        st.warning("Please fill out all the fields.")
 
 
 if __name__ == "__main__":

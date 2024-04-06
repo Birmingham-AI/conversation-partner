@@ -16,5 +16,17 @@ services:
       - ./core/:/app
       - ignore:/app/node_modules/
 
+  client:
+    container_name: conversation-bot-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+
+    restart: always
+    ports:
+      - 8501:8501
+    volumes:
+      - ./client/:/app
+
 volumes:
   ignore:

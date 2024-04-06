@@ -1,7 +1,11 @@
-FROM node:14
+FROM python:3.11
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+RUN pip install streamlit-mic-recorder
+
 COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "src/Home.py"]

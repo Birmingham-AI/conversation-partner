@@ -52,12 +52,11 @@ You should receive a response like this:
 { "message": "I'm alive you fools!" }
 ```
 
-You can also run `docker ps` to see container with the name `conversation-bot-server` running and its logs visible
-using:
+Navigate to the below URL to use the streamlit UI:
 
-```bash
-docker logs -f conversation-bot-server
-```
+
+http://localhost:8501/
+
 
 ## Exploration
 
