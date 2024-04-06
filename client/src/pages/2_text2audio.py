@@ -12,9 +12,9 @@ def main(text: str):
     headers = {"Content-Type": "application/json"}
 
     response = requests.request("POST", url, headers=headers, data=payload)
-    st.write(response.json())
+    st.audio(response.content)
 
-    st.audio(response.text)
+    # st.audio(response.text)
 
 if __name__ == "__main__":
     st.title("Text to Audio")
