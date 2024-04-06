@@ -1,7 +1,11 @@
 import streamlit as st
 import requests
 import json
-from audio2audio import transcribing_audio2text, transcribing_text2audio
+from audio2audio import (
+    transcribing_audio2text,
+    transcribing_text2audio,
+    analyze_user_response,
+)
 from streamlit_mic_recorder import mic_recorder
 
 # Config the whole app
@@ -11,8 +15,11 @@ st.set_page_config(
     layout="wide",  # initial_sidebar_state="expanded",
 )
 
+
 @st.cache_data
-def initializing_convo(name: str , skillLevel: str, language: str, age: int, interests: str) -> str:
+def initializing_convo(
+    name: str, skillLevel: str, language: str, age: int, interests: str
+) -> str:
 
     url = "http://localhost:3000/generateConversation"
 
@@ -34,7 +41,9 @@ def initializing_convo(name: str , skillLevel: str, language: str, age: int, int
 
 def main():
     st.title("Welcome to the conversation generator")
-    st.write("This is a conversation generator that will help you practice your conversation skills")
+    st.write(
+        "This is a conversation generator that will help you practice your conversation skills"
+    )
     st.write("Please fill out the following information to know more about you!")
     col1, col2 = st.columns(2)  # ([2, 1])
     with col1:
@@ -42,38 +51,44 @@ def main():
         age = st.number_input("Age")
     with col2:
         skillLevel = st.selectbox(
-            "Skill Level", ["Beginner", "Intermediate", "Advanced"]
+            "Skill Level", ["", "Beginner", "Intermediate", "Advanced"]
         )
         language = st.selectbox(
-        "Language",
-        [
-            "English",
-            "Spanish",
-            "French",
-            "German",
-            "Italian",
-            "Portuguese",
-            "Russian",
-            "Chinese",
-            "Japanese",
-            "Korean",
-            "Telugu",
-            "Hindi",
-        ],
-    )
+            "Target Language",
+            [
+                "",
+                "English",
+                "Spanish",
+                "French",
+                "German",
+                "Italian",
+                "Portuguese",
+                "Russian",
+                "Chinese",
+                "Japanese",
+                "Korean",
+                "Telugu",
+                "Hindi",
+            ],
+        )
     interests = st.text_input("list some Interests")
 
-    if st.button("Start Conversation"):
+    # check if all fields are filled
+    if name and age and skillLevel and language and interests:
+        # All fields are filled
+        # Continue with the rest of the code
         convo = initializing_convo(name, skillLevel, language, age, interests)
         st.write(":sunglasses: Your Summary: ")
-        st.write(convo['summary'])
+        st.write(convo["summary"])
         with st.expander("See explanation"):
             st.write(convo["questions"])
 
         # question = st.selectbox(
         #     "Pick your first question:", convo["questions"]
         # )
-        st.write(f"Your first question is: {convo['questions'][0]['questionInTargetLanguage']}")
+        st.write(
+            f"Your first question is: {convo['questions'][0]['questionInTargetLanguage']}"
+        )
         transcribed_audio = transcribing_text2audio(
             convo["questions"][0]["questionInTargetLanguage"]
         )
@@ -92,10 +107,18 @@ def main():
         if audio:
             st.write("Your recording:")
             st.audio(audio["bytes"])
-    
+
             response = transcribing_audio2text(audio["bytes"])
             st.write(f"\nTranscribed text: {response}\n")
-            transcribed_text = transcribing_audio2text(transcribed_audio)
+            convo["questions"][0]["userResponse"] = response
+            analysis = analyze_user_response(convo["questions"][0])
+            st.write("Analysis:")
+            st.write(analysis)
+            analysis_audio = transcribing_text2audio(analysis)
+            st.audio(analysis_audio)
+
+    else:
+        st.warning("Please fill out all the fields.")
 
 
 if __name__ == "__main__":
