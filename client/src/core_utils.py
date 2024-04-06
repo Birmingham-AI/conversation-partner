@@ -4,7 +4,7 @@ import json
 def transcribing_audio2text(audio: bytes) -> str:
     with open("audio.wav", "wb") as f:
         f.write(audio)
-    url = "http://localhost:3000/convertAudioToText"
+    url = "http://host.docker.internal:3000/convertAudioToText"
 
     files = {"file": open("audio.wav", "rb")}
     data = {'key': 'value'}
@@ -15,7 +15,7 @@ def transcribing_audio2text(audio: bytes) -> str:
 
 def transcribing_text2audio(text: str):
 
-    url = "http://localhost:3000/convertTextToAudio"
+    url = "http://host.docker.internal:3000/convertTextToAudio"
 
     payload = json.dumps({"text": text})
     headers = {"Content-Type": "application/json"}
@@ -25,7 +25,7 @@ def transcribing_text2audio(text: str):
 
 
 def analyze_user_response(convo):
-    url = "http://localhost:3000/analyzeUserResponse"
+    url = "http://host.docker.internal:3000/analyzeUserResponse"
 
     payload = json.dumps(
         {

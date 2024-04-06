@@ -21,7 +21,7 @@ def initializing_convo(
     name: str, skillLevel: str, language: str, age: int, interests: str
 ) -> str:
 
-    url = "http://localhost:3000/generateConversation"
+    url = "http://host.docker.internal:3000/generateConversation"
 
     payload = json.dumps(
         {
@@ -78,7 +78,7 @@ def main():
         # All fields are filled
         # Continue with the rest of the code
         convo = initializing_convo(name, skillLevel, language, age, interests)
-        st.write(":sunglasses: Your Summary: ")
+        st.header(":sunglasses: Your Summary: ")
         st.write(convo["summary"])
         with st.expander("See example questions"):
             st.write(convo["questions"])
