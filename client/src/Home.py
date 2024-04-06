@@ -39,8 +39,49 @@ def initializing_convo(
     return response.json()
 
 
+def question_generator(questions):
+    for question in questions:
+        yield question
+
+
+def conversation_generator(question):
+    transcribed_audio = None
+    audio = None
+    response = None
+    analysis = None
+    analysis_audio = None
+
+    st.write(f"Your question is: {question['questionInTargetLanguage']}")
+    transcribed_audio = transcribing_text2audio(question["questionInTargetLanguage"])
+    st.audio(transcribed_audio)
+    audio = mic_recorder(
+        start_prompt="Start recording",
+        stop_prompt="Stop recording",
+        just_once=False,
+        use_container_width=False,
+        callback=None,
+        args=(),
+        kwargs={},
+        key=None,
+    )
+    if audio:
+        st.write("Your recording:")
+        st.audio(audio["bytes"])
+        response = transcribing_audio2text(audio["bytes"])
+        st.write(f"\nTranscribed text: {response}\n")
+
+        question["userResponse"] = response
+        analysis = analyze_user_response(question)
+        st.write("Analysis:")
+        with st.spinner("Analyzing user response..."):
+            analysis_audio = transcribing_text2audio(analysis)
+        st.audio(analysis_audio, sample_rate=44100)  # 44100 samples per second)
+        st.write(analysis)
+
+
 def main():
     st.title("Welcome to the conversation generator")
+    st.subheader("From Birmingham-AI")
     st.write(
         "This is a conversation generator that will help you practice your conversation skills"
     )
@@ -78,44 +119,17 @@ def main():
         # All fields are filled
         # Continue with the rest of the code
         convo = initializing_convo(name, skillLevel, language, age, interests)
-        st.header(":sunglasses: Your Summary: ")
+        st.subheader(":sunglasses: Your Summary ")
         st.write(convo["summary"])
         with st.expander("See example questions"):
             st.write(convo["questions"])
 
-        # question = st.selectbox(
-        #     "Pick your first question:", convo["questions"]
-        # )
-        st.write(
-            f"Your first question is: {convo['questions'][0]['questionInTargetLanguage']}"
-        )
-        transcribed_audio = transcribing_text2audio(
-            convo["questions"][0]["questionInTargetLanguage"]
-        )
-        st.audio(transcribed_audio)
-        audio = mic_recorder(
-            start_prompt="Start recording",
-            stop_prompt="Stop recording",
-            just_once=False,
-            use_container_width=False,
-            callback=None,
-            args=(),
-            kwargs={},
-            key=None,
-        )
-
-        if audio:
-            st.write("Your recording:")
-            st.audio(audio["bytes"])
-
-            response = transcribing_audio2text(audio["bytes"])
-            st.write(f"\nTranscribed text: {response}\n")
-            convo["questions"][0]["userResponse"] = response
-            analysis = analyze_user_response(convo["questions"][0])
-            st.write("Analysis:")
-            analysis_audio = transcribing_text2audio(analysis)
-            st.audio(analysis_audio)
-            st.write(analysis)
+        # questions = [
+        #     question["questionInTargetLanguage"] for question in convo["questions"]
+        # ]
+        question = st.selectbox("Select a question", [None] + convo["questions"])
+        if question:
+            conversation_generator(question)
 
     else:
         st.warning("Please fill out all the fields.")
