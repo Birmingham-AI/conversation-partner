@@ -6,10 +6,14 @@ import analyzeUserResponse from "./routes/analyzeConversation";
 import convertTextToAudio from "./routes/convertTextToAudio";
 import convertAudioToText from "./routes/convertAudioToText";
 
+// cors does not support esm it seems:
+const cors = require("cors");
+
 // Config
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use("/", healthcheck);

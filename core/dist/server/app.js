@@ -10,9 +10,12 @@ const respondToUser_1 = __importDefault(require("./routes/respondToUser"));
 const analyzeConversation_1 = __importDefault(require("./routes/analyzeConversation"));
 const convertTextToAudio_1 = __importDefault(require("./routes/convertTextToAudio"));
 const convertAudioToText_1 = __importDefault(require("./routes/convertAudioToText"));
+// cors does not support esm it seems:
+const cors = require("cors");
 // Config
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use(cors());
 // Routes
 app.use("/", healthcheck_1.default);
 app.use("/", generateConversation_1.default);

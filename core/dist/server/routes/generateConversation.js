@@ -8,6 +8,7 @@ const conversation_1 = require("../../core/conversation");
 const router = express_1.default.Router();
 exports.default = router.post("/generateConversation", async (req, res) => {
     //   Inputs from the request
+    console.log(req.body);
     const name = req.body.name;
     const skillLevel = req.body.skillLevel;
     const language = req.body.language;
@@ -16,7 +17,9 @@ exports.default = router.post("/generateConversation", async (req, res) => {
     console.log(`💬 Request for new ${language} conversation for ${name} whose skill level is: ${skillLevel}`);
     //   We'll validate them first
     if (!name || !skillLevel || !language || !age || !interests) {
-        res.json({ error: "You must include name, skillLevel, language, age, and interests fields" });
+        res.json({
+            error: "You must include name, skillLevel, language, age, and interests fields",
+        });
     }
     // New conversation
     const conversation = await (0, conversation_1.generateConversation)(name, skillLevel, language, age, interests);
