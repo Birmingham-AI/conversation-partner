@@ -52,8 +52,7 @@ You should receive a response like this:
 { "message": "I'm alive you fools!" }
 ```
 
-Navigate to the below URL to use the streamlit UI:
-
+Navigate to the below URL to talk to your conversation partner:
 
 http://localhost:8501/
 
