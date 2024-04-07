@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 
 def transcribing_audio2text(audio: bytes) -> str:
     with open("audio.wav", "wb") as f:
@@ -10,6 +11,7 @@ def transcribing_audio2text(audio: bytes) -> str:
     data = {'key': 'value'}
     response = requests.post(url, files=files, data=data)
 
+    os.remove("audio.wav")
     return response.text
 
 
@@ -37,3 +39,4 @@ def analyze_user_response(convo):
     response = requests.request("GET", url, headers=headers, data=payload)
 
     return response.text
+
