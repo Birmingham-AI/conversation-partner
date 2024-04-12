@@ -5,11 +5,13 @@ import respondToUser from "./routes/respondToUser";
 import analyzeUserResponse from "./routes/analyzeConversation";
 import convertTextToAudio from "./routes/convertTextToAudio";
 import convertAudioToText from "./routes/convertAudioToText";
+import cors from "cors"
 
 // Config
 const app = express();
 
 app.use(express.json());
+app.use(cors())
 
 // Routes
 app.use("/", healthcheck);

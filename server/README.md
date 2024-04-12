@@ -1,4 +1,4 @@
-# Conversation Partner Frontend
+# Conversation Partner
 
 ## Overview
 
@@ -8,9 +8,7 @@ knowledgeable individual is too taxing or inaccessible for the user. This includ
 
 - Learning languages
 - Learning how to perform conversational tasks (patient histories, interviews, etc.)
-- Any problem-solving tasks 
-
-The Frontend of this project was completed using Vue.js
+- Any problem-solving tasks where question and answer is necessary
 
 ## Prerequisites
 
@@ -36,7 +34,7 @@ echo 'OPENAI_API_KEY=<YOUR_KEY>' > core/.env
 
 ## Usage
 
-Start the services by running the following from the root of the project from both the client and server folders:
+Start the services by running the following from the root of the project:
 
 ```bash
 docker compose up -d
@@ -54,12 +52,6 @@ You should receive a response like this:
 { "message": "I'm alive you fools!" }
 ```
 
-You can access the frontend of the app here:
-
-```bash
-curl localhost:8080
-```
-
 You can also run `docker ps` to see container with the name `conversation-bot-server` running and its logs visible
 using:
 
@@ -67,13 +59,8 @@ using:
 docker logs -f conversation-bot-server
 ```
 
-## Issues
-
-Sometimes, when the target language is set to English, it appears to default to Spanish 🤷  
-
 ## Exploration
 
 You can use this Postman collection to explore the API; select the `Language Bot` collection after opening:
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/mission-observer-40442015/workspace/bhm-ai-engineering)
-
