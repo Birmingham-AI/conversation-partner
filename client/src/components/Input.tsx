@@ -8,6 +8,7 @@ import clsx from "clsx";
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   icon?: ComponentType<HTMLAttributes<HTMLDivElement>>;
   label?: string;
+  wrapperClassName?: string;
 };
 
 export function Input({
@@ -15,11 +16,12 @@ export function Input({
   className,
   disabled,
   label,
+  wrapperClassName,
   ...inputProps
 }: InputProps) {
   return (
-    <label>
-      <span className="label-text pl-1 pb-1">{label}</span>
+    <label className={wrapperClassName}>
+      {label ? <span className="label-text pl-1 pb-1">{label}</span> : null}
       <div
         className={clsx(
           "input input-bordered flex items-center",

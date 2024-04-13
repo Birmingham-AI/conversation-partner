@@ -6,7 +6,7 @@ import {
   type GenerateConversationResponse,
 } from "../types";
 
-export const generateConversationKey = ["generate-conversation"];
+export const getGenerateConversationKey = () => ["generate-conversation"];
 
 /**
  * useMutation wrapper that takes the user's initial values and begins the conversation loop.
@@ -18,9 +18,9 @@ export const useGenerateConversation = () => {
     Error,
     GenerateConversationDTO
   >({
-    mutationKey: generateConversationKey,
+    mutationKey: getGenerateConversationKey(),
+    gcTime: Infinity,
     mutationFn: async (conversationInit) => {
-      console.log(conversationInit);
       const response = await fetchClient("/generateConversation", {
         method: "POST",
         body: JSON.stringify(conversationInit),

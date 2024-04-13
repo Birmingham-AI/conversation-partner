@@ -25,7 +25,7 @@ export default function RootLayout({
           "bg-base-300 flex flex-col justify-center items-center min-h-dvh"
         )}
       >
-        <main className="flex-grow w-full max-w-screen-xl bg-base-100">
+        <main className="flex-grow flex flex-col w-full max-w-screen-xl bg-base-100">
           <Providers>{children}</Providers>
         </main>
         <Footer />
