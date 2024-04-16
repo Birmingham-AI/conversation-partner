@@ -2,25 +2,27 @@
 import Response from "../components/Generator.vue";
 </script>
 
-<template>
-  <h1>Conversation Partner Frontend</h1>
-  <Response/>
+<template class="background">
+  <img src="../assets/depot.jpg" alt="innovation depot">
+
+    <Response/>
+
 
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+h1 {
+  color: white;
+  text-decoration-color: black;
+ }
 </style>

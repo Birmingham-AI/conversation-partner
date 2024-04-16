@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Conversation</h2>
-    <div v-html="dialogue"></div>
+    <div class="dialogue" v-html="dialogue"></div>
     <Audio :question="currentQuestion" />
     <form v-if="currentQuestionIndex < questions.length" @submit.prevent="submitResponse">
       <input type="text" v-model="userResponse">
@@ -9,6 +9,7 @@
     </form>
     <div class="or">or</div>
     <SendFile @updateResponse="userResponse = $event"/>
+    <div v-if="isLoading" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     <div v-if="showModal">
       <h2>Feedback</h2>
       <div class="feedback" v-html="analysisResults"></div>
@@ -40,13 +41,15 @@ export default {
       userResponse: "",
       currentQuestionIndex: 0,
       currentQuestion: this.questions.at(this.currentQuestionIndex).questionInTargetLanguage,
-      dialogue: this.questions.at(0).questionInTargetLanguage,
+      dialogue: "GPT: " + this.questions.at(0).questionInTargetLanguage,
       analysisResults: "",
-      showModal: false
+      showModal: false,
+      isLoading: false
     }
   },
   methods: {
     async submitResponse() {
+      this.isLoading = true
       const nextQuestion = this.currentQuestionIndex < this.questions.length - 1 ? this.questions[this.currentQuestionIndex + 1] : "That was the final question"
 
       try {
@@ -59,11 +62,12 @@ export default {
         const res = await respondToUser.respond(response)
 
 
-        this.dialogue += `<br>${this.userResponse}<br>${res.data.questionInTargetLanguage}`;
+        this.dialogue += `<br>User: ${this.userResponse}<br>GPT: ${res.data.questionInTargetLanguage}`;
         this.currentQuestion = res.data.questionInTargetLanguage
         await this.getAnalysis()
         this.userResponse = ""
         this.currentQuestionIndex += 1
+        this.isLoading = false
 
       } catch (err) {
         console.log(err)
@@ -92,14 +96,13 @@ export default {
 </script>
 
 <style scoped>
-div {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background-color: #f4f4f9;
+
+
+.dialogue {
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-radius: 10px;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
 }
 
 h2 {
@@ -155,16 +158,102 @@ audio {
 
 div.feedback {
   margin-top: 20px;
-  background-color: #e9ecef;
+  background-color: white;
   padding: 10px;
   border-radius: 5px;
 }
 
-div.v-html {
-  padding: 15px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-  border-radius: 4px;
+.lds-roller {
+  /* change color here */
+  color: blue;
+}
+.lds-roller,
+.lds-roller div,
+.lds-roller div:after {
+  box-sizing: border-box;
+}
+.lds-roller {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7.2px;
+  height: 7.2px;
+  border-radius: 50%;
+  background: currentColor;
+  margin: -3.6px 0 0 -3.6px;
+}
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 62.62742px;
+  left: 62.62742px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 67.71281px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 70.90963px;
+  left: 48.28221px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 70.90963px;
+  left: 31.71779px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 67.71281px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 62.62742px;
+  left: 17.37258px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12.28719px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

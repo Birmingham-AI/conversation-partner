@@ -1,7 +1,7 @@
 <template>
   <div>
     <input type="file" @change="handleFile"/>
-    <button @click="submitFile">Upload File</button>
+    <button @click="submitFile">Upload Audio File</button>
   </div>
 </template>
 
@@ -47,5 +47,15 @@ export default {
 
 
 <style scoped>
+button {
+  background-color: #5c67f2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
+button:hover {
+  background-color: #4a54e1;
+}
 </style>
