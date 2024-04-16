@@ -3,7 +3,7 @@ import { analyzeResponse } from "../../core/conversation";
 
 const router = express.Router();
 
-export default router.get("/analyzeUserResponse", async (req: Request, res: Response) => {
+export default router.post("/analyzeUserResponse", async (req: Request, res: Response) => {
   //   Inputs from the request
   const dialogue = req.body.dialogue;
 
