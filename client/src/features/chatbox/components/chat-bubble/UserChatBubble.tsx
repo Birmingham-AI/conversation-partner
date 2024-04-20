@@ -1,11 +1,19 @@
 import { FaUser } from "react-icons/fa";
-import { type ConversationItem } from "../../types";
+import { type ConversationItem } from "@/features/conversation";
 
 export type BotChatBubbleProps = {
   chatItem: ConversationItem;
+  onAnalyzeResponse: (questionIndex: number) => void;
 };
 
-export function UserChatBubble({ chatItem }: BotChatBubbleProps) {
+export function UserChatBubble({
+  chatItem,
+  onAnalyzeResponse,
+}: BotChatBubbleProps) {
+  const handleAnalyzeResponse = () =>
+    typeof chatItem.questionIndex === "number" &&
+    onAnalyzeResponse(chatItem.questionIndex);
+
   return (
     <div className="chat chat-end">
       <div className="chat-image avatar">
@@ -22,6 +30,7 @@ export function UserChatBubble({ chatItem }: BotChatBubbleProps) {
       <div className="chat-bubble">{chatItem.displayText}</div>
       <div
         role="button"
+        onClick={handleAnalyzeResponse}
         className="chat-footer opacity-50 italic hover:opacity-35"
       >
         How did I do?

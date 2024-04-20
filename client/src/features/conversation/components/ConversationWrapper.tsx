@@ -3,11 +3,14 @@ import { useState } from "react";
 import {
   type ConversationMode,
   useGeneratedConversationState,
-} from "@/features/GenerateConversation";
+} from "@/features/generate-conversation";
+import { ChatBoxContainer, UserResponseInput } from "@/features/chatbox";
 import { useAudioQueue } from "../hooks/useAudioQueue";
 import { useManagedConversationState } from "../hooks/useManagedConversationState";
-import { ChatWindowContainer } from "./ChatWindow/ChatWindowContainer";
-import { UserResponseInput } from "./ChatWindow/UserResponseInput";
+import { RecordResponse } from "../../speech/components/RecordResponse";
+import { AudioContainer } from "../../speech/components/AudioContainer";
+import { SpeechVisualizer } from "../../speech/components/SpeechVisualizer";
+import { useRecordResponse } from "../../speech/hooks/useRecordUserInput";
 
 export function ConversationWrapper() {
   const { variables } = useGeneratedConversationState();
@@ -15,7 +18,10 @@ export function ConversationWrapper() {
     variables?.conversationMode ?? "text"
   );
 
-  const { queueAudioForPlayback, isAudioPlaying } = useAudioQueue();
+  const { mediaInputStream } = useRecordResponse();
+
+  const { queueAudioForPlayback, isAudioPlaying, activeAudioItem } =
+    useAudioQueue();
   const {
     submitResponse,
     chatHistory,
@@ -27,6 +33,11 @@ export function ConversationWrapper() {
 
   return (
     <div className="flex-1 flex flex-col h-full">
+      <SpeechVisualizer
+        isTextMode={isTextMode}
+        audioSrc={activeAudioItem}
+        mediaInputStream={mediaInputStream}
+      />
       <button
         onClick={() =>
           setConversationMode((current) =>
@@ -37,7 +48,7 @@ export function ConversationWrapper() {
         toggle textmode
       </button>
       <div>{conversationMode}</div>
-      <ChatWindowContainer
+      <ChatBoxContainer
         isTextMode={isTextMode}
         onAudioPlay={queueAudioForPlayback}
         chatHistory={chatHistory}
@@ -49,7 +60,13 @@ export function ConversationWrapper() {
           isResponding={isResponding}
           hasResponseError={hasErrorSubmittingResponse}
         />
-      </ChatWindowContainer>
+      </ChatBoxContainer>
+      {/* <AudioContainer
+        submitResponse={submitResponse}
+        chatHistory={chatHistory}
+        isResponding={isResponding}
+        hasErrorSubmittingResponse={hasErrorSubmittingResponse}
+      /> */}
     </div>
   );
 }

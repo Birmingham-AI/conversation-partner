@@ -8,7 +8,10 @@ import { useDebounceCallback } from "usehooks-ts";
  */
 export const useAudioQueue = () => {
   const [audioQueue, setAudioQueue] = useState<HTMLAudioElement[]>([]);
-  const [isQueueLocked, setIsQueueLocked] = useState(false);
+  // const [isQueueLocked, setIsQueueLocked] = useState(false);
+  const [activeAudioItem, setActiveAudioItem] = useState<
+    HTMLAudioElement | undefined
+  >();
 
   const queueAudioForPlayback = useCallback(
     (audio: HTMLAudioElement) =>
@@ -16,26 +19,30 @@ export const useAudioQueue = () => {
     []
   );
 
-  const onSpeechEnd = useDebounceCallback(() => setIsQueueLocked(false), 500);
+  const onSpeechEnd = useDebounceCallback(
+    () => setActiveAudioItem(undefined),
+    500
+  );
 
   useEffect(() => {
     const [nextAudio, ...restOfQueue] = audioQueue;
-    if (nextAudio && !isQueueLocked) {
+    if (nextAudio && !activeAudioItem) {
       try {
-        setIsQueueLocked(true);
+        setActiveAudioItem(nextAudio);
         nextAudio.addEventListener("ended", onSpeechEnd, { once: true });
         nextAudio.play();
       } catch (error) {
-        setIsQueueLocked(false);
+        setActiveAudioItem(undefined);
         console.error(error);
       } finally {
         setAudioQueue(restOfQueue);
       }
     }
-  }, [audioQueue, isQueueLocked, onSpeechEnd]);
+  }, [audioQueue, activeAudioItem, onSpeechEnd]);
 
   return {
     queueAudioForPlayback,
-    isAudioPlaying: isQueueLocked,
+    isAudioPlaying: !!activeAudioItem,
+    activeAudioItem,
   } as const;
 };

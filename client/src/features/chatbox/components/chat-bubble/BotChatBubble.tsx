@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { FaRobot, FaPlay } from "react-icons/fa";
-import { Button } from "@/components/Button";
-import { useTextToAudio } from "../../hooks/useTextToAudio";
-import { type ConversationItem } from "../../types";
+import { type ConversationItem } from "@/features/conversation";
+import { BotChatAudioAvatar } from "./BotChatAudioAvatar";
 
 export type BotChatBubbleProps = {
   chatItem: ConversationItem;
@@ -17,18 +15,14 @@ export function BotChatBubble({
   isAudioPlaying,
 }: BotChatBubbleProps) {
   const [isShowingTranslation, setIsShowingTranslation] = useState(false);
-  const { data: audio, isError } = useTextToAudio(chatItem.displayText);
-
-  const isAudioDisabled = !audio || isAudioPlaying || isError;
-  const handleAudioPlay = () => audio && onAudioPlay(audio);
 
   return (
-    <div className="chat chat-start">
-      <div className="chat-image avatar">
-        <div className="rounded-full bg-accent p-2">
-          <FaRobot className="text-accent-content text-2xl" />
-        </div>
-      </div>
+    <div className="chat chat-start group">
+      <BotChatAudioAvatar
+        onAudioPlay={onAudioPlay}
+        isAudioPlaying={isAudioPlaying}
+        audioText={chatItem.displayText}
+      />
       <div className="chat-header">
         Language Bot
         <time className="text-xs opacity-50 ml-1">
@@ -36,15 +30,6 @@ export function BotChatBubble({
         </time>
       </div>
       <div className="chat-bubble">
-        <span className="pr-1">
-          <Button
-            className="btn-xs btn-circle"
-            disabled={isAudioDisabled}
-            onClick={handleAudioPlay}
-          >
-            <FaPlay className="w-2 h-2" />
-          </Button>
-        </span>
         {isShowingTranslation ? chatItem.additionalText : chatItem.displayText}
       </div>
       <div

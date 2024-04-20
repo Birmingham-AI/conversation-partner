@@ -1,6 +1,5 @@
-import { RefObject, useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useTimeout } from "usehooks-ts";
 import { fetchClient } from "@/utils/fetchClient";
 import {
   type ConversationQuestion,
@@ -14,31 +13,12 @@ import { questionToChatItem } from "../utils";
  */
 export const useManagedConversationState = () => {
   const { data: generatedConversation } = useGeneratedConversationState();
-  const { summary, questions = [] } = generatedConversation ?? {};
+  const { questions = [] } = generatedConversation ?? {};
 
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  const [chatHistory, setChatHistory] = useState<ConversationItem[]>(() =>
-    summary
-      ? [
-          {
-            type: "info",
-            author: "bot",
-            timestamp: Date.now(),
-            displayText: summary,
-          },
-        ]
-      : []
+  const [chatHistory, setChatHistory] = useState<ConversationItem[]>(
+    questions.at(0) ? [questionToChatItem(questions[0], 0)] : []
   );
-
-  // add the first question to the history after a short delay:
-  useTimeout(() => {
-    const questionToAdd = questions[activeQuestionIndex];
-
-    if (chatHistory.length < 2 && questionToAdd) {
-      const question = questionToChatItem(questionToAdd, activeQuestionIndex);
-      setChatHistory((history) => [...history, question]);
-    }
-  }, 1000);
 
   const {
     mutate: submitResponse,
@@ -49,7 +29,7 @@ export const useManagedConversationState = () => {
     mutationFn: async (userResponse) => {
       const previousQuestion = questions[activeQuestionIndex];
       const nextQuestion = questions[activeQuestionIndex + 1];
-      console.log(userResponse, previousQuestion, nextQuestion);
+
       const response = await fetchClient("/respondToUser", {
         method: "POST",
         body: JSON.stringify({

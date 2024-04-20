@@ -15,3 +15,8 @@ export type ResponseToUserAnswer = {
   questionInEnglish: string;
   questionInTargetLanguage: string;
 };
+
+export type AnalyzeResponseInput = {
+  questionText: string;
+  responseText: string;
+};

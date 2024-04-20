@@ -26,7 +26,7 @@ export function UserResponseInput({
   };
 
   return (
-    <form className="flex gap-1 w-full items-center" onSubmit={handleSubmit}>
+    <form className="flex gap-2 w-full items-center" onSubmit={handleSubmit}>
       <Input
         wrapperClassName="flex-grow"
         disabled={isResponding}

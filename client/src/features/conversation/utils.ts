@@ -1,5 +1,5 @@
-import { type ConversationQuestion } from "../GenerateConversation";
-import { type ConversationItem } from "./types";
+import { type ConversationQuestion } from "@/features/generate-conversation";
+import { type ConversationItem, type AnalyzeResponseInput } from "./types";
 
 export const questionToChatItem = (
   question: ConversationQuestion,
@@ -12,3 +12,28 @@ export const questionToChatItem = (
   displayText: question.questionInTargetLanguage,
   additionalText: question.questionInEnglish,
 });
+
+export const getAnalyzeTarget = (
+  chatItems: ConversationItem[],
+  targetIndex?: number
+): AnalyzeResponseInput => {
+  if (typeof targetIndex !== "number") {
+    return { questionText: "", responseText: "" };
+  }
+
+  const questionText =
+    chatItems.find(
+      ({ questionIndex, type }) =>
+        questionIndex === targetIndex && type === "question"
+    )?.displayText ?? "";
+  const responseText =
+    chatItems.find(
+      ({ questionIndex, type }) =>
+        questionIndex === targetIndex && type === "answer"
+    )?.displayText ?? "";
+
+  return { questionText, responseText };
+};
+
+export const delay = (duration: number) =>
+  new Promise((resolve) => setTimeout(resolve, duration));
