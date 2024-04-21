@@ -105,14 +105,14 @@ export function RecordResponse({
   return (
     <div>
       <p> {isRecording ? "recording" : "waiting"}</p>
-      {/* {isRecording ? (
+      {isRecording ? (
         <button onClick={onRecordEnd}>stop</button>
       ) : (
         <button onClick={onRecord}>record</button>
-      )} */}
-      <button className=" btn-circle btn-lg p-20">
+      )}
+      {/* <button className=" btn-circle btn-lg p-20" onClick={onRecord}>
         <CiMicrophoneOn className="text-secondary-content text-4xl" />
-      </button>
+      </button> */}
       {/* <button
         className="btn btn-circle btn-lg"
         onMouseDown={onRecord}

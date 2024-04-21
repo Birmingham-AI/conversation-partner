@@ -1,4 +1,4 @@
-import { GenerateConversationForm } from "@/features/GenerateConversation/components/GenerateConversationForm";
+import { GenerateConversationForm } from "@/features/generate-conversation";
 
 export default function Home() {
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import clsx from "clsx";
 import { Inter } from "next/font/google";
-import { Footer } from "@/features/layout/Footer";
+import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/utils/Providers";
 import "./globals.css";
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="emerald">
+    <html lang="en">
       <body
         className={clsx(
           inter.className,

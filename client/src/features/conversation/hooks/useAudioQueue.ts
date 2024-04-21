@@ -8,7 +8,6 @@ import { useDebounceCallback } from "usehooks-ts";
  */
 export const useAudioQueue = () => {
   const [audioQueue, setAudioQueue] = useState<HTMLAudioElement[]>([]);
-  // const [isQueueLocked, setIsQueueLocked] = useState(false);
   const [activeAudioItem, setActiveAudioItem] = useState<
     HTMLAudioElement | undefined
   >();
@@ -21,7 +20,7 @@ export const useAudioQueue = () => {
 
   const onSpeechEnd = useDebounceCallback(
     () => setActiveAudioItem(undefined),
-    500
+    300
   );
 
   useEffect(() => {

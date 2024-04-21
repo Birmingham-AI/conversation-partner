@@ -3,10 +3,10 @@ import { useRef, type ChangeEvent, type FormEvent } from "react";
 import { Card } from "@/components/Card";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
-import { Select, SelectOption, toSelectOptions } from "@/components/Select";
+import { Select, toSelectOptions } from "@/components/Select";
 import { TextArea } from "@/components/TextArea";
 import { useGenerateConversation } from "../hooks/useGenerateConverstation";
-import { ConversationMode, type GenerateConversationDTO } from "../types";
+import { type GenerateConversationDTO } from "../types";
 import { ConversationFormError } from "./ConversationFormError";
 
 const formFieldConfig = [
@@ -21,17 +21,6 @@ const skillLevelOptions = toSelectOptions([
   "Intermediate",
   "Advanced",
 ]);
-
-const communicationMode: SelectOption<ConversationMode>[] = [
-  {
-    display: "Text",
-    value: "text",
-  },
-  {
-    display: "Speech",
-    value: "speech",
-  },
-];
 
 export function GenerateConversationForm() {
   const { mutate, isError, isPending } = useGenerateConversation();
@@ -69,17 +58,6 @@ export function GenerateConversationForm() {
           label="Skill Level"
           options={skillLevelOptions}
           onChange={(value) => (formInputRef.current.skillLevel = value)}
-        />
-        <Select
-          required
-          defaultValue="text"
-          disabled={isPending}
-          label="Conversation Style"
-          options={communicationMode}
-          onChange={(value) => {
-            console.log(value);
-            formInputRef.current.conversationMode = value;
-          }}
         />
         <TextArea
           rows={3}

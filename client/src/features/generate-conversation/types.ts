@@ -1,12 +1,9 @@
-export type ConversationMode = "speech" | "text";
-
 export type GenerateConversationDTO = {
   name: string;
   skillLevel: string;
   language: string;
   age: number;
   interests: string;
-  conversationMode: ConversationMode;
 };
 
 export type ConversationQuestion = {

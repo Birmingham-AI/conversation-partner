@@ -4,7 +4,7 @@ import { fetchClient } from "@/utils/fetchClient";
 import {
   type ConversationQuestion,
   useGeneratedConversationState,
-} from "@/features/GenerateConversation";
+} from "@/features/generate-conversation";
 import { type ConversationItem, type ResponseToUserAnswer } from "../types";
 import { questionToChatItem } from "../utils";
 
@@ -12,16 +12,17 @@ import { questionToChatItem } from "../utils";
  * Hook to manage the conversation state, history, and dispatch feedback events.
  */
 export const useManagedConversationState = () => {
-  const { data: generatedConversation } = useGeneratedConversationState();
+  const generatedConversation = useGeneratedConversationState();
   const { questions = [] } = generatedConversation ?? {};
 
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  const [chatHistory, setChatHistory] = useState<ConversationItem[]>(
+  const [chatHistory, setChatHistory] = useState<ConversationItem[]>(() =>
     questions.at(0) ? [questionToChatItem(questions[0], 0)] : []
   );
 
   const {
     mutate: submitResponse,
+    mutateAsync: submitResponseAsync,
     isError: hasErrorSubmittingResponse,
     isPending: isResponding,
   } = useMutation<ResponseToUserAnswer, Error, string>({
@@ -67,6 +68,7 @@ export const useManagedConversationState = () => {
 
   return {
     submitResponse,
+    submitResponseAsync,
     hasErrorSubmittingResponse,
     isResponding,
     chatHistory,

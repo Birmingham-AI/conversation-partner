@@ -45,7 +45,7 @@ export const useRecordResponse = () => {
     // I do not understand what, but some async process causes this to get weird if you
     // don't give it a tick to create the blob. As far as I can tell, there is no async
     // step here, so this is a bit of a bandaid/hack.
-    await delay(100);
+    await delay(50);
 
     setIsRecording(false);
     return new Blob(audioChunks.current);

@@ -1,10 +1,17 @@
-import { type ConversationItem } from "@/features/conversation";
+import {
+  type ResponseToUserAnswer,
+  type ConversationItem,
+} from "@/features/conversation";
 import { RecordResponse } from "./RecordResponse";
 import { useAudioToText } from "../hooks/useAudioToText";
 import { useRecordResponse } from "../hooks/useRecordUserInput";
+import { SpeechVisualizer } from "./SpeechVisualizer";
 
 export type AudioContainerProps = {
-  submitResponse: (response: string) => void;
+  isTextMode: boolean;
+  setIsTextMode: (isTextMode: boolean) => void;
+  submitResponse: (response: string) => Promise<ResponseToUserAnswer>;
+  isAudioPlaying: boolean;
   chatHistory: ConversationItem[];
   isResponding: boolean;
   hasErrorSubmittingResponse: boolean;
@@ -13,35 +20,51 @@ export type AudioContainerProps = {
 
 export function AudioContainer({
   submitResponse,
+  setIsTextMode,
+  isTextMode,
   chatHistory,
   isResponding,
   hasErrorSubmittingResponse,
-  activeAudioItem,
+  isAudioPlaying,
 }: AudioContainerProps) {
-  const { beginRecording, completeRecording, isRecording } =
+  const { beginRecording, completeRecording, isRecording, mediaInputStream } =
     useRecordResponse();
 
-  const { mutate: convertSpeechToText, isPending: isProcessingSpeech } =
-    useAudioToText({
-      onSuccess: ({ text }) => submitResponse(text),
-    });
+  const { mutateAsync: convertSpeechToText, isPending: isProcessingSpeech } =
+    useAudioToText();
 
-  const isRecordingDisabled =
-    isProcessingSpeech || isResponding || !!activeAudioItem;
-
-  const handleRecordingEnd = async () => {
-    const recordingBlob = await completeRecording();
-    const test = global.window.URL.createObjectURL(recordingBlob);
-    new Audio(test).play();
-    convertSpeechToText(recordingBlob);
+  const handleSpeechResponse = async () => {
+    try {
+      const blob = await completeRecording();
+      const responseText = await convertSpeechToText(blob);
+      const questionResponse = await submitResponse(responseText.text);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  const isRecordingDisabled =
+    isProcessingSpeech || isResponding || !!isAudioPlaying || isRecording;
+
   return (
-    <RecordResponse
-      onRecord={beginRecording}
-      onRecordEnd={handleRecordingEnd}
-      isDisabled={isRecordingDisabled}
-      isRecording={isRecording}
-    />
+    <>
+      <SpeechVisualizer
+        mediaInputStream={mediaInputStream}
+        isRecording={isRecording}
+        isTextMode={isTextMode}
+      />
+      <RecordResponse
+        onRecord={() => {
+          setIsTextMode(false);
+          beginRecording();
+        }}
+        onRecordEnd={async () => {
+          await handleSpeechResponse();
+          setIsTextMode(true);
+        }}
+        isDisabled={isRecordingDisabled}
+        isRecording={isRecording}
+      />
+    </>
   );
 }

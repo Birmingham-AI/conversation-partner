@@ -1,5 +1,9 @@
 import { type ConversationQuestion } from "@/features/generate-conversation";
-import { type ConversationItem, type AnalyzeResponseInput } from "./types";
+import {
+  type ConversationItem,
+  type AnalyzeResponseInput,
+  ConversationItemType,
+} from "./types";
 
 export const questionToChatItem = (
   question: ConversationQuestion,
@@ -21,16 +25,14 @@ export const getAnalyzeTarget = (
     return { questionText: "", responseText: "" };
   }
 
-  const questionText =
+  const findItem = (itemType: ConversationItemType) =>
     chatItems.find(
       ({ questionIndex, type }) =>
-        questionIndex === targetIndex && type === "question"
+        questionIndex === targetIndex && type === itemType
     )?.displayText ?? "";
-  const responseText =
-    chatItems.find(
-      ({ questionIndex, type }) =>
-        questionIndex === targetIndex && type === "answer"
-    )?.displayText ?? "";
+
+  const questionText = findItem("question");
+  const responseText = findItem("answer");
 
   return { questionText, responseText };
 };

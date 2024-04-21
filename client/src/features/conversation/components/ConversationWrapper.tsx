@@ -1,53 +1,27 @@
 "use client";
 import { useState } from "react";
-import {
-  type ConversationMode,
-  useGeneratedConversationState,
-} from "@/features/generate-conversation";
 import { ChatBoxContainer, UserResponseInput } from "@/features/chatbox";
+import { AudioContainer } from "@/features/speech";
 import { useAudioQueue } from "../hooks/useAudioQueue";
 import { useManagedConversationState } from "../hooks/useManagedConversationState";
-import { RecordResponse } from "../../speech/components/RecordResponse";
-import { AudioContainer } from "../../speech/components/AudioContainer";
-import { SpeechVisualizer } from "../../speech/components/SpeechVisualizer";
-import { useRecordResponse } from "../../speech/hooks/useRecordUserInput";
 
 export function ConversationWrapper() {
-  const { variables } = useGeneratedConversationState();
-  const [conversationMode, setConversationMode] = useState<ConversationMode>(
-    variables?.conversationMode ?? "text"
-  );
-
-  const { mediaInputStream } = useRecordResponse();
-
-  const { queueAudioForPlayback, isAudioPlaying, activeAudioItem } =
-    useAudioQueue();
+  const [isTextMode, setIsTextMode] = useState(true);
+  const { queueAudioForPlayback, isAudioPlaying } = useAudioQueue();
   const {
     submitResponse,
+    submitResponseAsync,
     chatHistory,
     isResponding,
     hasErrorSubmittingResponse,
   } = useManagedConversationState();
 
-  const isTextMode = conversationMode === "text";
-
   return (
     <div className="flex-1 flex flex-col h-full">
-      <SpeechVisualizer
-        isTextMode={isTextMode}
-        audioSrc={activeAudioItem}
-        mediaInputStream={mediaInputStream}
-      />
-      <button
-        onClick={() =>
-          setConversationMode((current) =>
-            current === "text" ? "speech" : "text"
-          )
-        }
-      >
+      <button onClick={() => setIsTextMode((current) => !current)}>
         toggle textmode
       </button>
-      <div>{conversationMode}</div>
+      <div>{isTextMode ? "text" : "speech"}</div>
       <ChatBoxContainer
         isTextMode={isTextMode}
         onAudioPlay={queueAudioForPlayback}
@@ -61,12 +35,16 @@ export function ConversationWrapper() {
           hasResponseError={hasErrorSubmittingResponse}
         />
       </ChatBoxContainer>
-      {/* <AudioContainer
-        submitResponse={submitResponse}
+      <button onClick={() => submitResponseAsync("testertime")}>test</button>
+      <AudioContainer
+        isTextMode={isTextMode}
+        setIsTextMode={setIsTextMode}
+        submitResponse={submitResponseAsync}
         chatHistory={chatHistory}
         isResponding={isResponding}
+        isAudioPlaying={isAudioPlaying}
         hasErrorSubmittingResponse={hasErrorSubmittingResponse}
-      /> */}
+      />
     </div>
   );
 }
