@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import clsx from "clsx";
 import { Inter } from "next/font/google";
+import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/utils/Providers";
 import "./globals.css";
@@ -25,6 +26,7 @@ export default function RootLayout({
           "bg-base-300 flex flex-col justify-center items-center min-h-dvh"
         )}
       >
+        <Header />
         <main className="flex-grow flex flex-col w-full max-w-screen-xl bg-base-100">
           <Providers>{children}</Providers>
         </main>

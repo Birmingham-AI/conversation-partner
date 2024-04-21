@@ -24,7 +24,7 @@ const skillLevelOptions = toSelectOptions([
 
 export function GenerateConversationForm() {
   const { mutate, isError, isPending } = useGenerateConversation();
-  const formInputRef = useRef<any>({ conversationMode: "text" });
+  const formInputRef = useRef<any>({});
 
   const updateHandler =
     (key: keyof GenerateConversationDTO) =>
@@ -35,7 +35,6 @@ export function GenerateConversationForm() {
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // console.log(formInputRef.current);
     mutate(formInputRef.current as GenerateConversationDTO);
   };
 

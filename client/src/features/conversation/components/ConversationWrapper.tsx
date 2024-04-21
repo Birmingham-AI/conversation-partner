@@ -43,6 +43,7 @@ export function ConversationWrapper() {
           isAudioPlaying={isAudioPlaying}
           onRecordBegin={handleBeginRecording}
           hasConversationEnded={hasConversationEnded}
+          chatItemTotal={chatHistory.length}
         />
       </ChatBoxContainer>
       <AudioContainer

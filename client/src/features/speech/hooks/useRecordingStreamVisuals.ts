@@ -15,7 +15,7 @@ export const useRecordingStreamVisualsEffect = (
   const recordingRef = useRef(isRecording);
 
   useEffect(() => {
-    // Needed a way to reference this in scope for the
+    // Needed a way to reference this between renders for the
     // isTranscribing check in the draw function:
     recordingRef.current = isRecording;
 

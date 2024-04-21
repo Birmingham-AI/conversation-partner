@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   type ComponentType,
   type HTMLAttributes,
   type InputHTMLAttributes,
@@ -11,14 +12,10 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   wrapperClassName?: string;
 };
 
-export function Input({
-  icon: Icon,
-  className,
-  disabled,
-  label,
-  wrapperClassName,
-  ...inputProps
-}: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function (
+  { icon: Icon, className, disabled, label, wrapperClassName, ...inputProps },
+  ref
+) {
   return (
     <label className={wrapperClassName}>
       {label ? <span className="label-text pl-1 pb-1">{label}</span> : null}
@@ -29,9 +26,11 @@ export function Input({
           className
         )}
       >
-        <input className="grow" disabled={disabled} {...inputProps} />
+        <input className="grow" disabled={disabled} {...inputProps} ref={ref} />
         {Icon ? <Icon /> : null}
       </div>
     </label>
   );
-}
+});
+
+Input.displayName = "Input";

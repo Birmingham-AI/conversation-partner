@@ -62,8 +62,9 @@ export function ChatBoxContainer({
         isTextMode ? "opacity-100" : "opacity-0"
       )}
     >
+      {/* TODO: responsive max height based off container size */}
       <div
-        className="overflow-y-auto h-[70dvh] w-full border border-base-300 rounded-md p-4"
+        className="overflow-y-auto h-[67dvh] sm:h-[70dvh] md:h-[73dvh] w-full border border-base-300 rounded-md p-4"
         ref={chatContainerRef}
       >
         {chatHistory.map((item) =>

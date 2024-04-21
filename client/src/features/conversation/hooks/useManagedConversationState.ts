@@ -30,7 +30,7 @@ export const useManagedConversationState = () => {
     mutationFn: async (userResponse) => {
       const previousQuestion = questions[activeQuestionIndex];
       const nextQuestion = questions.at(activeQuestionIndex + 1) ?? {
-        questionInTargetLanguage: "",
+        questionInTargetLanguage: "This has been fun, but I must be going now.",
       };
 
       const response = await fetchClient("/respondToUser", {

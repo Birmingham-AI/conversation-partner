@@ -30,7 +30,6 @@ export function AudioContainer({
   const [isProcessingResponse, setIsProcessingResponse] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const queryClient = useQueryClient();
-
   const { mutateAsync: convertSpeechToText } = useAudioToText();
 
   useRecordingStreamVisualsEffect(canvasRef, isRecording, mediaInputStream);
@@ -53,6 +52,7 @@ export function AudioContainer({
       }
     } catch (error) {
       setIsProcessingResponse(false);
+      setIsTextMode(true);
       console.error(error);
     }
   };
