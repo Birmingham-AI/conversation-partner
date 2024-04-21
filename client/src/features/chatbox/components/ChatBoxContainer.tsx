@@ -6,19 +6,16 @@ import {
   type ReactNode,
 } from "react";
 import clsx from "clsx";
-import { Card } from "@/components/Card";
-import {
-  getAnalyzeTarget,
-  type ConversationItem,
-  type AnalyzeResponseInput,
-} from "@/features/conversation";
-import { BotChatBubble } from "./chat-bubble/BotChatBubble";
-import { UserChatBubble } from "./chat-bubble/UserChatBubble";
-import { TypingIndicator } from "./chat-bubble/TypingIndicator";
+import { type ConversationItem } from "@/features/conversation";
 import {
   AnalyzeResponseModal,
   openAnalyzeResponseModal,
-} from "./AnalyzeResponseModal";
+  getAnalyzeTarget,
+  type AnalyzeResponseInput,
+} from "@/features/analyze-response";
+import { BotChatBubble } from "./chat-bubble/BotChatBubble";
+import { UserChatBubble } from "./chat-bubble/UserChatBubble";
+import { TypingIndicator } from "./chat-bubble/TypingIndicator";
 
 export type ChatWindowProps = {
   children: ReactNode;
@@ -61,8 +58,8 @@ export function ChatBoxContainer({
   return (
     <div
       className={clsx(
-        "w-full p-6 duration-200 transition-all flex flex-col gap-4 h-full flex-grow",
-        isTextMode ? "opacity-100" : "opacity-10"
+        "w-full duration-200 transition-all flex flex-col gap-4 h-full py-3",
+        isTextMode ? "opacity-100" : "opacity-0"
       )}
     >
       <div

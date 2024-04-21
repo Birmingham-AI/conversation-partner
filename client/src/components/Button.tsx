@@ -20,7 +20,7 @@ export function Button({
   ...buttonProps
 }: ButtonProps) {
   return (
-    <button className={clsx("btn", className)} {...buttonProps}>
+    <button className={clsx("btn", className)} type="button" {...buttonProps}>
       {loading ? (
         <span className="loading loading-spinner loading-sm" />
       ) : (

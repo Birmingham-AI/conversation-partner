@@ -8,7 +8,7 @@ export const useAnalyzeResponse = (
   questionInTargetLanguage?: string,
   userResponse?: string
 ) => {
-  const result = useQuery({
+  const result = useQuery<unknown, Error, { analysis: string }>({
     enabled: !!questionInTargetLanguage && !!userResponse,
     staleTime: Infinity,
     queryKey: getAnalyzeResponseKey(questionInTargetLanguage, userResponse),

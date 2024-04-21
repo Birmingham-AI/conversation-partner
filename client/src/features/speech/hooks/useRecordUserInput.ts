@@ -16,6 +16,8 @@ export const useRecordResponse = () => {
   useEffect(() => {
     try {
       (async () => {
+        // TODO: adjust stream subscription so browser only indicates recording when the recording is in process,
+        // not the whole time the stream is open.
         const stream = await global.window.navigator.mediaDevices.getUserMedia({
           audio: true,
         });
@@ -42,9 +44,8 @@ export const useRecordResponse = () => {
 
   const completeRecording = useCallback(async () => {
     mediaRecorder?.stop();
-    // I do not understand what, but some async process causes this to get weird if you
-    // don't give it a tick to create the blob. As far as I can tell, there is no async
-    // step here, so this is a bit of a bandaid/hack.
+    // TODO: Look into why this is necessary. From what I can tell, there is no async process to await, but not taking an
+    // extra tick here prevents the old blob content from being reverted.
     await delay(50);
 
     setIsRecording(false);

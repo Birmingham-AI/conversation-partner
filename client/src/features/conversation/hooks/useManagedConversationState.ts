@@ -29,7 +29,9 @@ export const useManagedConversationState = () => {
     mutationKey: ["answer-question", activeQuestionIndex],
     mutationFn: async (userResponse) => {
       const previousQuestion = questions[activeQuestionIndex];
-      const nextQuestion = questions[activeQuestionIndex + 1];
+      const nextQuestion = questions.at(activeQuestionIndex + 1) ?? {
+        questionInTargetLanguage: "",
+      };
 
       const response = await fetchClient("/respondToUser", {
         method: "POST",
@@ -72,6 +74,6 @@ export const useManagedConversationState = () => {
     hasErrorSubmittingResponse,
     isResponding,
     chatHistory,
-    hasConversationEnded: activeQuestionIndex >= questions.length - 1,
+    hasConversationEnded: activeQuestionIndex >= questions.length,
   };
 };

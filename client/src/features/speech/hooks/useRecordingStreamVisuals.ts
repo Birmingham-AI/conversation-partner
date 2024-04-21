@@ -2,7 +2,7 @@ import { useRef, useEffect, type RefObject } from "react";
 
 import { drawDictaphoneLine } from "../utils";
 
-export const useRecordingStreamVisuals = (
+export const useRecordingStreamVisualsEffect = (
   canvas: RefObject<HTMLCanvasElement>,
   isRecording: boolean,
   mediaStream?: MediaStream

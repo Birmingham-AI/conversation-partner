@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { FaRobot, FaPlay } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
+import { VscRobot } from "react-icons/vsc";
 import { HiMiniSpeakerWave } from "react-icons/hi2";
 import { useTextToAudio } from "@/features/conversation";
 
@@ -34,7 +35,7 @@ export function BotChatAudioAvatar({
   return (
     <button
       className={clsx(
-        "chat-image avatar swap hover:opacity-85",
+        "chat-image avatar swap",
         isAudioDisabled
           ? "cursor-default"
           : "group-hover:swap-active hover:opacity-85"
@@ -51,7 +52,7 @@ export function BotChatAudioAvatar({
         {isAudioPlaySource ? (
           <HiMiniSpeakerWave className="text-accent-content text-2xl" />
         ) : (
-          <FaRobot className="text-accent-content text-2xl" />
+          <VscRobot className="text-accent-content text-2xl" />
         )}
       </div>
     </button>

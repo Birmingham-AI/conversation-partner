@@ -1,3 +1,6 @@
+import { type QueryClient } from "@tanstack/react-query";
+import { getTextoToAudioKey } from "@/features/conversation";
+
 // Very heavily inspired by MDN's example:
 // https://github.com/mdn/dom-examples/blob/main/media/web-dictaphone/scripts/app.js
 export const drawDictaphoneLine = (
@@ -54,4 +57,56 @@ export const drawDictaphoneLine = (
   if (!isTranscribing()) {
     canvasCtx.reset();
   }
+};
+
+// TODO: switch to a useMutation or possibly a queryObserver
+export const getAudioFromCache = (queryClient: QueryClient, text: string) =>
+  new Promise<HTMLAudioElement>((resolve, reject) => {
+    const pollingInterval = setInterval(() => {
+      const queryState = queryClient.getQueryState<HTMLAudioElement>(
+        getTextoToAudioKey(text)
+      );
+
+      const { status, data } = queryState ?? {};
+
+      if (status === "error") {
+        clearInterval(pollingInterval);
+        reject();
+      }
+
+      if (data) {
+        clearInterval(pollingInterval);
+        resolve(data);
+      }
+    }, 50);
+  });
+
+export const visualizeAudioFile = (
+  canvas: HTMLCanvasElement | null,
+  audio: HTMLAudioElement,
+  onEnd: () => void
+) => {
+  if (!canvas) {
+    return;
+  }
+
+  let isPlaying = true;
+  const audioContext = new AudioContext();
+  const analyser = audioContext.createAnalyser();
+  const source = audioContext.createMediaElementSource(audio);
+
+  audio.addEventListener("ended", () => {
+    onEnd();
+    isPlaying = false;
+  });
+
+  audio.play();
+
+  source.connect(analyser);
+  source.connect(audioContext.destination);
+
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  drawDictaphoneLine(canvas, analyser, dataArray, () => isPlaying);
 };

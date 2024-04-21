@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
-import { ChatBoxContainer, UserResponseInput } from "@/features/chatbox";
-import { AudioContainer } from "@/features/speech";
+import { ChatBoxContainer } from "@/features/chatbox";
+import { AudioContainer, useRecordResponse } from "@/features/speech";
 import { useAudioQueue } from "../hooks/useAudioQueue";
 import { useManagedConversationState } from "../hooks/useManagedConversationState";
+import { ResponseErrorAlert } from "./ResponseErrorAlert";
+import { UserResponseInput } from "./UserResponseInput";
 
 export function ConversationWrapper() {
   const [isTextMode, setIsTextMode] = useState(true);
@@ -14,14 +16,20 @@ export function ConversationWrapper() {
     chatHistory,
     isResponding,
     hasErrorSubmittingResponse,
+    hasConversationEnded,
   } = useManagedConversationState();
 
+  const { beginRecording, completeRecording, isRecording, mediaInputStream } =
+    useRecordResponse();
+
+  const handleBeginRecording = () => {
+    beginRecording();
+    setIsTextMode(false);
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-full">
-      <button onClick={() => setIsTextMode((current) => !current)}>
-        toggle textmode
-      </button>
-      <div>{isTextMode ? "text" : "speech"}</div>
+    <div className="flex-1 flex flex-col items-center h-full py-3 px-6 md:px-10 lg:px-16">
+      {hasErrorSubmittingResponse ? <ResponseErrorAlert /> : null}
       <ChatBoxContainer
         isTextMode={isTextMode}
         onAudioPlay={queueAudioForPlayback}
@@ -32,18 +40,19 @@ export function ConversationWrapper() {
         <UserResponseInput
           onSubmit={submitResponse}
           isResponding={isResponding}
-          hasResponseError={hasErrorSubmittingResponse}
+          isAudioPlaying={isAudioPlaying}
+          onRecordBegin={handleBeginRecording}
+          hasConversationEnded={hasConversationEnded}
         />
       </ChatBoxContainer>
-      <button onClick={() => submitResponseAsync("testertime")}>test</button>
       <AudioContainer
-        isTextMode={isTextMode}
-        setIsTextMode={setIsTextMode}
+        completeRecording={completeRecording}
         submitResponse={submitResponseAsync}
-        chatHistory={chatHistory}
-        isResponding={isResponding}
+        setIsTextMode={setIsTextMode}
+        isRecording={isRecording}
+        isTextMode={isTextMode}
         isAudioPlaying={isAudioPlaying}
-        hasErrorSubmittingResponse={hasErrorSubmittingResponse}
+        mediaInputStream={mediaInputStream}
       />
     </div>
   );
