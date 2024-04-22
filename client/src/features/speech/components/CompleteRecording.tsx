@@ -1,19 +1,19 @@
 import { MdDone } from "react-icons/md";
 import { Button } from "@/components/Button";
 
-export type RecordResponseProps = {
+export type CompleteRecordingProps = {
   onRecordEnd: () => void;
   isDisabled: boolean;
 };
 
-export function RecordResponse({
+export function CompleteRecording({
   onRecordEnd,
   isDisabled,
-}: RecordResponseProps) {
+}: CompleteRecordingProps) {
   return (
     <div className="flex justify-center w-full">
       <Button
-        className="btn-primary btn-lg btn-block sm:w-1/2"
+        className="btn-primary btn-block"
         onClick={onRecordEnd}
         disabled={isDisabled}
       >

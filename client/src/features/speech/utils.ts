@@ -84,7 +84,7 @@ export const getAudioFromCache = (queryClient: QueryClient, text: string) =>
 export const visualizeAudioFile = (
   canvas: HTMLCanvasElement | null,
   audio: HTMLAudioElement,
-  onEnd: () => void
+  onEnd?: () => void
 ) => {
   if (!canvas) {
     return;
@@ -96,7 +96,7 @@ export const visualizeAudioFile = (
   const source = audioContext.createMediaElementSource(audio);
 
   audio.addEventListener("ended", () => {
-    onEnd();
+    onEnd?.();
     isPlaying = false;
   });
 

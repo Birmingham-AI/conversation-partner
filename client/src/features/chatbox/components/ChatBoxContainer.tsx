@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-  type ReactNode,
-} from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import clsx from "clsx";
 import { type ConversationItem } from "@/features/conversation";
 import {
@@ -18,7 +12,6 @@ import { UserChatBubble } from "./chat-bubble/UserChatBubble";
 import { TypingIndicator } from "./chat-bubble/TypingIndicator";
 
 export type ChatWindowProps = {
-  children: ReactNode;
   isTextMode: boolean;
   isResponding: boolean;
   isAudioPlaying: boolean;
@@ -27,7 +20,6 @@ export type ChatWindowProps = {
 };
 
 export function ChatBoxContainer({
-  children,
   isTextMode,
   isResponding,
   isAudioPlaying,
@@ -86,7 +78,6 @@ export function ChatBoxContainer({
         )}
         {isResponding ? <TypingIndicator /> : null}
       </div>
-      {children}
       <AnalyzeResponseModal
         questionText={analyzeTarget.questionText}
         responseText={analyzeTarget.responseText}
