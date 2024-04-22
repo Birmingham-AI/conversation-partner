@@ -2,7 +2,7 @@ export const fetchClient = (
   endpointPath: string,
   requestInit?: RequestInit
 ) => {
-  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+  const baseURL = process?.env?.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
   if (!baseURL) {
     throw new Error(
       `fetchClient: missing required environment variable: NEXT_PUBLIC_API_URL`

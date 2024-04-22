@@ -16,9 +16,9 @@ export function AnalyzeResponseModal({
 
   return (
     <dialog id="analyze-modal" className="modal">
-      <div className="modal-box h-[60dvh]">
+      <div className="modal-box">
         <h3 className="font-bold text-lg mb-3">Answer Analysis</h3>
-        <div className="h-[80%] overflow-auto px-3">
+        <div className="overflow-auto px-3">
           <AnalyzeModalContent
             analysisResult={data?.analysis}
             isError={isError}
