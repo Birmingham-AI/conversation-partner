@@ -24,7 +24,7 @@ export function AudioVisualizer({
       ref={canvasRef}
       className={clsx(
         "absolute rounded-full left-1/2 2 mt-[30dvh] -translate-x-1/2 z-20 duration-300 transition-all",
-        isTextMode ? "opacity-0 -z-10" : "opacity-100",
+        isTextMode ? "opacity-0 -z-20" : "opacity-100",
         !isRecording ? "bg-accent" : "bg-secondary",
         isProcessingResponse
           ? "animate-pulse size-20 translate-y-1/2"
