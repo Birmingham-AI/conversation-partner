@@ -1,4 +1,4 @@
-import { type ReactNode, useRef, type RefObject } from "react";
+import { type ReactNode, useRef } from "react";
 import Link from "next/link";
 import {
   useAudioVisualState,
@@ -13,13 +13,11 @@ export type UserResponseWrapperProps = {
   hasConversationEnded: boolean;
   setIsTextMode: (value: boolean) => void;
   submitResponseAsync: (response: string) => Promise<ResponseToUserAnswer>;
-  controlsRef: RefObject<HTMLDivElement>;
 };
 
 export function UserResponseWrapper({
   isTextMode,
   hasConversationEnded,
-  controlsRef,
   setIsTextMode,
   submitResponseAsync,
   children,
@@ -62,7 +60,7 @@ export function UserResponseWrapper({
         isProcessingResponse={isProcessingResponse}
         isRecording={isRecording}
       />
-      <div className="w-full h-min" ref={controlsRef}>
+      <div className="w-full h-min">
         {isRecording || isProcessingResponse || isBotSpeaking ? (
           <CompleteRecording
             onRecordEnd={handleSpeechSubmission}
